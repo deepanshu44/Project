@@ -31,16 +31,14 @@
   }
   &.auto2-hidden{
   @extend %prop;
-    visibility: hidden;
-  transition: visibility 1s;
+  animation-name: example;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
   }
-  &.auto2{
-  @extend %prop;
-    visibility: visible;
-  }
+
   @keyframes example {
-  from {visibility: hidden;}
-  to {visibility: visible;}
+  from {opacity: 0;}
+  to {opacity:  1;}
   }
 
 }

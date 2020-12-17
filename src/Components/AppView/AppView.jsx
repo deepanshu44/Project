@@ -32,7 +32,7 @@ export default function AppView() {
           >
           <Grid item xs={12} className="test" >hello</Grid>
           <Grid item xs={12} md={6} className="test" >
-          <Paper className={visible}>Test</Paper></Grid>
+          <Paper className="auto2-hidden">Test</Paper></Grid>
           <Grid item xs={6}className="test" >hello</Grid>
           <Grid item xs={7} className="test" >
           <Paper className="auto">xs=6</Paper>
