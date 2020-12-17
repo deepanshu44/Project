@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import './AppView.scss'
 
 export default function AppView() {
@@ -28,7 +29,7 @@ export default function AppView() {
           direction="row"
           justify="flex-start"
           alignItems="flex-start"
-          spacing={2}
+          spacing={1}
           >
           <Grid item xs={12} className="test" >hello</Grid>
           <Grid item xs={12} md={6} className="test" >
@@ -39,6 +40,12 @@ export default function AppView() {
         </Grid>
           <Grid item xs className="auto" >hello</Grid>
         </Grid>
+        <Box component="span" m={1}>
+        <Grid container spacing={2}>
+        <Grid item>hello
+        </Grid>
+      </Grid>
+      </Box>
 
       </Container>
 
