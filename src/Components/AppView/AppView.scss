@@ -1,0 +1,46 @@
+
+%prop{
+  height: 200px;
+  background-color: violet ;
+}
+.MuiGrid-root{
+  & .MuiGrid-item{
+    background-color:red;
+  }
+  & .MuiGrid-container{
+    background-color: green;
+  }
+}
+
+.MuiFormControl-root {
+  &.MuiTextField-root{
+    width: 100%;
+  }
+}
+	.MuiGrid-root{
+    &.MuiGrid-item{
+      &.test{
+
+      background-color:grey;
+    }
+    }
+  }
+.MuiPaper-root{
+  &.auto{
+    background-color: green;
+  }
+  &.auto2-hidden{
+  @extend %prop;
+    visibility: hidden;
+  transition: visibility 1s;
+  }
+  &.auto2{
+  @extend %prop;
+    visibility: visible;
+  }
+  @keyframes example {
+  from {visibility: hidden;}
+  to {visibility: visible;}
+  }
+
+}

@@ -1,0 +1,8 @@
+.MuiInput-root
+{		width: inherit;
+	&.MuiInput-underline:after{
+		border-bottom-color: green;
+		font-style: italic;
+
+	}
+}
