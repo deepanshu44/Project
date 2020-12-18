@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleGrow() {
+export default function SimpleGrow(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState(false);
 
@@ -35,7 +35,7 @@ export default function SimpleGrow() {
   };
 
   return (
-    <div className={classes.root}>
+    <div style={{visibility:props.value}} className={classes.root}>
       <FormControlLabel
         control={<Switch checked={checked} onChange={handleChange} />}
         label="Show"

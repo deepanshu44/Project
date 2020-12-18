@@ -3,6 +3,10 @@
   height: 200px;
   background-color: violet ;
 }
+%animate{
+  position: relative;
+  padding: 100px;
+}
 .MuiGrid-root{
   & .MuiGrid-item{
     background-color:red;
@@ -34,6 +38,20 @@
   animation-name: example;
   animation-duration: 2s;
   animation-fill-mode: forwards;
+  }
+  &.animate1{
+    @extend %animate;
+    transition:top 1s linear 200ms;
+    top:30px
+}
+  &.animate2{
+    @extend %animate;
+      top:0px;
+  }
+  @media only screen and (max-width: 600px) {
+    &.animate1 {
+      top:0px;
+    }
   }
 
   @keyframes example {

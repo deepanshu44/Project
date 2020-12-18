@@ -15,3 +15,9 @@ export default App;
 //     console.log(Math.trunc(Math.log(a.getBoundingClientRect().top)),
 //     Math.trunc(Math.log(a.getBoundingClientRect().bottom)))
 //   })
+
+//(a.getBoundingClientRect().y-window.pageYOffset)/window.pageYOffset
+
+// when element in viewport
+//a.getBoundingClientRect().y===window.innerHeight
+//near edge
