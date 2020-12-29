@@ -4,7 +4,6 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-<<<<<<< HEAD
 import Box from '@material-ui/core/Box';
 import './AppView.scss'
 
@@ -77,70 +76,3 @@ export default function AppView() {
         </React.Fragment>
       );
     }
-=======
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Box from '@material-ui/core/Box';
-import Fade from '@material-ui/core/Fade';
-import axios from 'axios'
-import './AppView.scss'
-
-export default function AppView() {
-  const [checked1,setChecked1]=React.useState(false)
-  const [checked2,setChecked2]=React.useState(false)
-  React.useEffect(()=>{
-    setChecked1(true)
-console.log("helloefect")
-  var a=document.getElementsByClassName('test2')[0]
-    var b=document.getElementById('1')
-    var c=document.getElementById('2')
-    a.addEventListener('scroll',
-    ()=>{if (b.getBoundingClientRect().x===a.getBoundingClientRect().x) {
-      setChecked1(true);
-      console.log('true1');
-    } else {
-      setChecked1(false)
-    }
-    if (c.getBoundingClientRect().x===a.getBoundingClientRect().x) {
-      setChecked2(true);
-      console.log('true2');
-    } else {
-      setChecked2(false);
-    }
-    //  console.log(b.getBoundingClientRect().x,"<--1  2-->",c.getBoundingClientRect().x)
-
-    })
-  },[])
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <Container maxWidth="xl">
-
-        <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            container
-            direction="column"
-            alignItems="center">
-            <Grid item className="test2">
-                  <Grid item xs={12} className='test' id='1'>
-                    <Fade in={checked1}><div>hello</div></Fade>
-                  </Grid>
-                  <Grid item xs={12} className='test' id='2'>
-                    <Fade in={checked2}><div>hello</div></Fade>
-                  </Grid>
-              </Grid>
-              <Grid item >
-                <a href='#1'><button>click</button></a>
-                <a href='#2'><button>click</button></a>
-              </Grid>
-          </Grid>
-
-      </Grid>
-      </Container>
-
-
-    </React.Fragment>
-  );
-}
->>>>>>> initial-final
