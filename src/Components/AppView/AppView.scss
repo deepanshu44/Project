@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 %prop{
   height: 200px;
@@ -53,10 +54,21 @@
       top:0px;
     }
   }
+=======
+.MuiContainer-root{
+  margin-top:60px;
+}
+.test{
+>>>>>>> initial-final
 
-  @keyframes example {
-  from {opacity: 0;}
-  to {opacity:  1;}
-  }
+  width:100%;
+  min-width: 100%;
+  margin: 15px;
 
+}
+.MuiGrid-root.MuiGrid-item.test2{
+  display: inherit;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  width:inherit;
 }
