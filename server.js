@@ -3,8 +3,12 @@ require('dotenv').config();
 const app = express();
 var http = require('http').Server(app);
 var path=require('path');
+var User=require('./user.js')
+const passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
 const multer = require('multer');
 var bodyParser = require('body-parser')
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 var fs=require('fs')
 
 // support parsing of application/json type post data
@@ -50,11 +54,17 @@ var upload = multer({storage:storage})
 app.use(express.static(path.join(__dirname, 'build')));
 //Import the mongoose module
 
-app.get('/', function (req, res) {
-  res.cookie('name', 'express').sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 
 });
-                
+app.get('/testing',(req,res)=>res.send('failed'))
+app.get('/test',
+  passport.authenticate('local', { failureRedirect: '/about' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
 app.get('/image',function(req,res){
     let buff = fs.readFileSync(path.join(__dirname, 'src/', 'c-d-x-PDX_a_82obo-unsplash.jpg'),(err, data) => {
                       if (err) throw err;
@@ -63,7 +73,7 @@ app.get('/image',function(req,res){
                     let base64data = buff.toString('base64');
 		res.send(base64data);
               })
-                                
+
 
 var os = require('os');
 
@@ -77,6 +87,39 @@ for (var k in interfaces) {
         }
     }
 }
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+
+    User.findOne({ name: username }, function (err, user) {
+      
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (user.pass!==password) { return done(null, false); }
+      return done(null, user);
+    });
+  }
+));
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  db.users.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.post('/login',
+  passport.authenticate('local',{failureRedirect: '/error'}),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.redirect('/users/' + req.user.username);
+  });
+
 process.env.REACT_APP_PUBLIC_URL="hello"
 console.log("process",process.env.REACT_APP_PUBLIC_URL);
 
