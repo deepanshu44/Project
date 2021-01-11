@@ -6,6 +6,7 @@ var path=require('path');
 var User=require('./user.js')
 const passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
+  var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const multer = require('multer');
 var bodyParser = require('body-parser')
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
@@ -22,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -54,7 +55,8 @@ var upload = multer({storage:storage})
 app.use(express.static(path.join(__dirname, 'build')));
 //Import the mongoose module
 
-app.get('/*', function (req, res) {
+app.get('/', function (req, res) {
+  console.log("reqkbb",req.user);
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 
 });
@@ -91,20 +93,38 @@ passport.use(new LocalStrategy(
   function(username, password, done) {
 
     User.findOne({ name: username }, function (err, user) {
-      
+
       if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (user.pass!==password) { return done(null, false); }
+      if (!user) { return done(null, false,{ message: 'Incorrect username.' }); }
+      if (user.pass!==password) { return done(null, false,{ message: 'Incorrect password.' }); }
       return done(null, user);
     });
   }
 ));
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+console.log(profile._json);
+const data=JSON.stringify(profile._json);
+    User.findOneAndUpdate({ _id: profile.id },{$set:{_id:profile.id}},{upsert:true,returnNewDocument:true}, function (err, user) {
+      console.log("user",user);
+
+      return cb(err, profile._json);
+    });
+  }
+));;
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+console.log("serializeUser",user);
+  cb(null, user);
 });
 
 passport.deserializeUser(function(id, cb) {
-  db.users.findById(id, function (err, user) {
+
+  User.findById(id.sub, function (err, user) {
+    console.log("deserializeUser",user,id);
     if (err) { return cb(err); }
     cb(null, user);
   });
@@ -113,16 +133,42 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.post('/login',
-  passport.authenticate('local',{failureRedirect: '/error'}),
+  passport.authenticate('local',{successRedirect: '/',
+                                 failureRedirect: '/error',
+                               })
+);
+app.use('/test', (req, res, next) => {
+  if (req.user) {
+    return next();
+  }
+  res.sendStatus(405);
+})
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['email','profile'] }));
+console.log("hellow");
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    res.redirect('/users/' + req.user.username);
+    console.log("req user",req.user);
+    // Successful authentication, redirect home
+    res.redirect('/');
   });
+  //app.get('/test',function(req,res){console.log("reqqqqqqqqqqqqqqq",req.user);res.redirect('/users')})
+  app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/loggedout');
+  });
+  app.post('/test', function(req,res){console.log("post test",req.body,"requser",req.isAuthenticated(),req.user,req.session.passport.user);})
+  app.get('/*', function (req, res) {
+  res.redirect('/');
+
+});
 
 process.env.REACT_APP_PUBLIC_URL="hello"
 console.log("process",process.env.REACT_APP_PUBLIC_URL);
 
-  http.listen(8000,addresses[0], function() {  //,'192.168.1.18'
-    console.log('listening on'+addresses[0]+':8000');
-  });
+  http.listen(8000);
+
+ // http.listen(8000,addresses[0], function() {  //,'192.168.1.18'
+   // console.log('listening on'+addresses[0]+':8000');

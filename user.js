@@ -10,7 +10,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var Schema = mongoose.Schema;
 
 var userSchema = Schema({
-
+   _id:  Number,
+   data: String,
    name: String,
    pass: String,
 });
